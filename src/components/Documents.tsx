@@ -1,7 +1,7 @@
-import PlaceholderDocument from "./PlaceholderDocument";
-// import { adminDb } from "@/firebaseAdmin";
 import { auth } from "@clerk/nextjs/server";
-// import Document from "./Document";
+import { adminDb } from "@/lib/firebase/firebaseAdmin";
+import PlaceholderDocumentPreview from "./PlaceholderDocumentPreview";
+import DocumentPreview from "./DocumentPreview";
 
 async function Documents() {
   auth().protect();
@@ -11,20 +11,20 @@ async function Documents() {
     throw new Error("User not found");
   }
 
-//   const documentsSnapshot = await adminDb
-//     .collection("users")
-//     .doc(userId)
-//     .collection("files")
-//     .orderBy("createdAt")
-//     .get();
+  const documentsSnapshot = await adminDb
+    .collection("users")
+    .doc(userId)
+    .collection("files")
+    .orderBy("createdAt")
+    .get();
 
   return (
     <div className="flex flex-wrap p-5 bg-gray-100 justify-center lg:justify-start rounded-sm gap-5 max-w-7xl mx-auto">
-      {/* {documentsSnapshot.docs.map((doc) => {
+      {documentsSnapshot.docs.map((doc) => {
         const { name, downloadUrl, size, createdAt } = doc.data();
 
         return (
-          <Document
+          <DocumentPreview
             key={doc.id}
             id={doc.id}
             name={name}
@@ -33,9 +33,9 @@ async function Documents() {
             createdAt={createdAt.toDate().toLocaleString()}
           />
         );
-      })} */}
+      })}
 
-      <PlaceholderDocument />
+      <PlaceholderDocumentPreview />
     </div>
   );
 }

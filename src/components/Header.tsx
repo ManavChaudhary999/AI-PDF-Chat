@@ -73,6 +73,7 @@ function Header() {
                 <ThemeToggle />
                 <UserButton />
             </div>
+            
         </div>
     </header>
   );

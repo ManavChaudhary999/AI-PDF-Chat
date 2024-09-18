@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 // import useSubscription from "@/hooks/useSubscription";
 
-function PlaceholderDocument() {
+function PlaceholderDocumentPreview() {
 //   const { isOverFileLimit } = useSubscription();
   const isOverFileLimit = false;
   const router = useRouter();
@@ -38,4 +38,4 @@ function PlaceholderDocument() {
     </Button>
   );
 }
-export default PlaceholderDocument;
+export default PlaceholderDocumentPreview;
