@@ -7,7 +7,7 @@ import {
     SheetTrigger,
   } from "@/components/ui/sheet";
 import { FilePlus2, Menu} from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
+// import ThemeToggle from "./ThemeToggle";
 import UpgradeButton from "./ui/UpgradeButton";
 
 function Header() {
@@ -35,13 +35,13 @@ function Header() {
                         </Link>
                     </Button>
                     
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
                     <UpgradeButton />
                     <UserButton />
                 </nav>
             </SignedIn>
 
-            {/* Mobile Menu */}
+            {/* Mobile Navigation */}
             <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="md:hidden">
@@ -71,7 +71,7 @@ function Header() {
                 <Button variant="outline" size="icon">
                     <FilePlus2 className="text-indigo-600 h-5 w-5" />
                 </Button>
-                <ThemeToggle />
+                {/* <ThemeToggle /> */}
                 <UserButton />
             </div>
             

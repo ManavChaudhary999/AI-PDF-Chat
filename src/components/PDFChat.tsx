@@ -96,7 +96,7 @@ export default function PDFChat({docId} : { docId: string }) {
         ]);
 
         startTransition(async () => {
-            const { success, message } = await askQuestion(docId, prevInput); // Server Action
+            const { success = false, type, message = 'Server Error' } = await askQuestion(docId, prevInput); // Server Action
 
             if (!success) {
                 toast({
@@ -104,9 +104,9 @@ export default function PDFChat({docId} : { docId: string }) {
                     description: message,
                     variant: "destructive",
                     action: (
-                        <ToastAction onClick={() => router.push("/dashboard/upgrade")} altText="Upgrade to Pro">
+                        type==="FREE" ? (<ToastAction onClick={() => router.push("/dashboard/upgrade")} altText="Upgrade to Pro">
                             Upgrade to Pro
-                        </ToastAction>
+                        </ToastAction>) : undefined
                     ),
                 });
 
