@@ -10,6 +10,9 @@ import {
     SaveIcon,
   } from "lucide-react";
 import useUpload, { StatusText } from '@/hooks/useUpload';
+import {useToast} from "@/hooks/use-toast";
+import { ToastAction } from "./ui/toast";
+import useSubscription from '@/hooks/useSubscription';
 
 
 const statusIcons: Record<StatusText, JSX.Element> = {
@@ -28,7 +31,11 @@ const statusIcons: Record<StatusText, JSX.Element> = {
 export default function FileUploader() {
   const { progress, status, fileId, handleUpload } = useUpload(); // Custom Hook
   const uploadInProgress = progress !== null && progress >= 0 && progress <= 100;
+  
+  const { hasActiveMembership, isOverFileLimit, filesLoading } = useSubscription();
+
   const router = useRouter();
+  const {toast} = useToast();
 
   useEffect(() => {
     if(fileId) {
@@ -40,14 +47,44 @@ export default function FileUploader() {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if(file) {
-      // Upload File
-      await handleUpload(file);
+      if(!isOverFileLimit && !filesLoading ) { // If File limit not reached
+        // Upload File
+        await handleUpload(file);
+        return;
+      }
+      else { // If file limit reached
+        if(!hasActiveMembership){
+          toast({
+            variant: "destructive",
+            title: "Free Plan File Limit Reached",
+            description:
+              "You have reached the maximum number of files allowed for your account. Please upgrade to add more documents.",
+            action: (
+                <ToastAction onClick={() => router.push("/dashboard/upgrade")} altText="Upgrade to Pro">
+                    Upgrade to Pro
+                </ToastAction>
+            ),
+          });
+        }
+        else {
+          toast({
+              variant: "destructive",
+              title: "Pro Plan File Limit Reached",
+              description:
+                "You have reached the maximum number of files allowed for your account. Please Delete old files to add more documents.",
+          });
+        }
+      }
     } else {
       // Error
-      console.error("Error uploading file");
-      // TODO: TOAST
+      toast({
+        variant: "destructive",
+        title: "Error Uploading File",
+        description:
+          "Your file is too large to compile",
+      });
     }
-  }, [handleUpload]);
+  }, [handleUpload, isOverFileLimit, filesLoading, hasActiveMembership, , router, toast]);
 
 
   const {getRootProps, getInputProps, isDragActive, isFocused, isDragAccept } = useDropzone({

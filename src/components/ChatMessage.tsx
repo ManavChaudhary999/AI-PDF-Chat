@@ -2,9 +2,9 @@ import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { BotIcon, Loader2Icon } from "lucide-react";
 import Markdown from "react-markdown";
-import { Message } from "./PDFChat";
+import { MessageType } from "@/config";
 
-export default function ChatMessage({ message }: { message: Message }) {
+export default function ChatMessage({ message }: { message: MessageType }) {
     const isHuman = message.role === "human";
     const { user } = useUser();
 

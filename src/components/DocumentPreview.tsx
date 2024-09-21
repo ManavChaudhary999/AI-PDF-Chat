@@ -63,7 +63,7 @@ export default function DocumentPreview({
                     )}
                 </Button>
 
-                <Button variant="default" className="text-white bg-indigo-600" asChild>
+                <Button variant="outline" className="text-white bg-indigo-600" asChild>
                     <a href={downloadUrl} download target="_blank">
                         <DownloadCloud className="h-6 w-6" />
                     </a>

@@ -2,11 +2,8 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { adminDb } from "@/lib/firebase/firebaseAdmin";
-import { Message } from "@/components/PDFChat";
 import { generateLangchainCompletion } from "@/lib/langchain";
-
-// const FREE_LIMIT = 3;
-// const PRO_LIMIT = 100;
+import { MessageType, FREE_QUESTIONS_LIMIT, PRO_QUESTIONS_LIMIT } from "@/config";
 
 export async function askQuestion(docId: string, question: string) {
     auth().protect(); // Protect Route with Clerk
@@ -21,13 +18,27 @@ export async function askQuestion(docId: string, question: string) {
     .collection("messages");
 
     // Check how many user messages are in the chat
-    // const chatSnapshot = await chatRef.get();
-    // const userMessages = chatSnapshot.docs.filter(doc => doc.data().role === "human");
+    const chatSnapshot = await chatRef.get();
+    const userMessages = chatSnapshot.docs.filter(doc => doc.data().role === "human");
 
-    // TODO: Add logic to check if user has reached free limit or pro limit
+    // Check if user has reached free limit or pro limit
+    const userRef = await adminDb.collection("users").doc(userId!).get();
+    if(userMessages.length >= FREE_QUESTIONS_LIMIT && !userRef.data()?.hasActiveMembership) {
+        return {
+            success: false,
+            message: "You have reached the free limit. Please upgrade to Pro to use more features."
+        };        
+    }
+
+    if(userMessages.length >= PRO_QUESTIONS_LIMIT && userRef.data()?.hasActiveMembership) {
+        return {
+            success: false,
+            message: "You have reached the Pro limit. Sorry, you can't ask more questions."
+        };        
+    }
 
     // Add user message to chat
-    const userMessage:Message = {
+    const userMessage:MessageType = {
         role: "human",
         message: question,
         createdAt: new Date(),
@@ -37,12 +48,12 @@ export async function askQuestion(docId: string, question: string) {
     // Generate AI response and add it to chat
     const response = await generateLangchainCompletion(docId, question);
 
-    const aiMessage:Message = {
+    const aiMessage:MessageType = {
         role: "ai",
         message: response,
         createdAt: new Date(),
     }
     await chatRef.add(aiMessage);
 
-    return {success: true, message: "Hello World"};
+    return {success: true, message: null};
 }

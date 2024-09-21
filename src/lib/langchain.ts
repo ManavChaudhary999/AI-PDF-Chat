@@ -125,7 +125,7 @@ const model = new ChatCohere({
 
 // Function to generate embeddings using Cohere API
 
-async function namespaceExists(index: Index<RecordMetadata>, docId: string) {
+export async function namespaceExists(index: Index<RecordMetadata>, docId: string) {
     if(!docId) throw new Error("Missing namespace");
 
     const { namespaces } = await index.describeIndexStats();
@@ -235,14 +235,6 @@ export async function generateEmbeddingsInPineconeVectorStore(docId: string) {
         // them in the Pinecone vector store
     
         const splitDocs = await generateDocs(docId);
-
-        // Generate embeddings using the Cohere model for each document
-        // const documentsWithEmbeddings = await Promise.all(
-        //     splitDocs.map(async (doc) => ({
-        //         ...doc,
-        //         embedding: await generateCohereEmbeddings(doc.pageContent),
-        //     }))
-        // );
     
         console.log(
           `--- Storing the embeddings in namespace ${docId} in the ${indexName} Pinecone vector store... ---`

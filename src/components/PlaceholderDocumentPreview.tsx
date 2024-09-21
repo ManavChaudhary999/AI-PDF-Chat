@@ -4,11 +4,10 @@
 import { FrownIcon, PlusCircleIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-// import useSubscription from "@/hooks/useSubscription";
+import useSubscription from "@/hooks/useSubscription";
 
 function PlaceholderDocumentPreview() {
-//   const { isOverFileLimit } = useSubscription();
-  const isOverFileLimit = false;
+  const { isOverFileLimit } = useSubscription();
   const router = useRouter();
 
   const handleClick = () => {

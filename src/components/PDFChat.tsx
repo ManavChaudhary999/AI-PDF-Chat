@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -11,20 +12,18 @@ import { db } from "@/lib/firebase/firebase";
 import { askQuestion } from "@/actions/askQuestion";
 import { v4 as randomUUID } from "uuid";
 import ChatMessage from "./ChatMessage";
-// import { useToast } from "./ui/use-toast";
+import { MessageType } from "@/config";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "./ui/toast";
 
-export type Message = {
-    id?: string;
-    role: "human" | "ai" | "placeholder";
-    message: string;
-    createdAt: Date;
-}
 
 export default function PDFChat({docId} : { docId: string }) {
     const { user } = useUser();
+    const { toast } = useToast();
+    const router = useRouter();
 
     const [input, setInput] = useState<string>("");
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<MessageType[]>([]);
     const [isPending, startTransition] = useTransition();
     const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
@@ -100,9 +99,18 @@ export default function PDFChat({docId} : { docId: string }) {
             const { success, message } = await askQuestion(docId, prevInput); // Server Action
 
             if (!success) {
-                setMessages((prev) =>
-                    // TODO: Toast element
+                toast({
+                    title: "Error",
+                    description: message,
+                    variant: "destructive",
+                    action: (
+                        <ToastAction onClick={() => router.push("/dashboard/upgrade")} altText="Upgrade to Pro">
+                            Upgrade to Pro
+                        </ToastAction>
+                    ),
+                });
 
+                setMessages((prev) =>
                     // We want to remove the last message element, which is the "Thinking..." message
                     // and replace it with the error message
                     prev.slice(0, prev.length - 1).concat([

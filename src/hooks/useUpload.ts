@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
-// import { useRouter } from "next/navigation";
 import { v4 as randomUUID } from "uuid";
 import { db, storage } from "@/lib/firebase/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -24,13 +23,9 @@ export default function useUpload() {
     const [status, setStatus] = useState<Status | null>(null);
 
     const { user } = useUser();
-    // const router = useRouter();
 
     const handleUpload = async (file: File) => {
         if(!file || !user) return;
-
-        // TODO: FREE/PREMIUM PLANS
-
 
         // UPLOAD FILE TO CLOUD STORAGE
         const uploadedFileId = randomUUID();

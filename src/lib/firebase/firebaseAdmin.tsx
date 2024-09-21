@@ -1,5 +1,8 @@
+// Server Side FIrebase SDK
+
 import { initializeApp,getApps, getApp, App, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const serviceAccount = require("@root/firebase_admin_key.json");
@@ -20,4 +23,6 @@ if (!getApps().length) {
 }
 
 export const adminDb = getFirestore(app);
+export const adminStorage = getStorage(app);
+
 export { app as adminApp };

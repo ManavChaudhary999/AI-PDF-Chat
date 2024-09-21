@@ -8,7 +8,7 @@ import {
   } from "@/components/ui/sheet";
 import { FilePlus2, Menu} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
-// import UpgradeButton from "./ui/UpgradeButton";
+import UpgradeButton from "./ui/UpgradeButton";
 
 function Header() {
   return (
@@ -36,7 +36,7 @@ function Header() {
                     </Button>
                     
                     <ThemeToggle />
-                    {/* <UpgradeButton /> */}
+                    <UpgradeButton />
                     <UserButton />
                 </nav>
             </SignedIn>
@@ -52,15 +52,16 @@ function Header() {
                 <SheetContent side="right" className="bg-white">
                     <nav className="flex flex-col space-y-4">
                         <Button asChild variant={"link"}>
-                            <Link href="/pricing" className="text-sm font-medium hover:text-primary">
+                            <Link href="/dashboard/upgrade" className="text-sm font-medium hover:text-primary">
                                 Pricing
                             </Link>
                         </Button>
                         <Button asChild variant={"outline"}>
-                            <Link href="/documents" className="text-sm font-medium hover:text-primary">
+                            <Link href="/dashboard" className="text-sm font-medium hover:text-primary">
                                 My Documents
                             </Link>
                         </Button>
+                        <UpgradeButton />
                     </nav>
                 </SheetContent>
             </Sheet>
