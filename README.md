@@ -1,3 +1,3 @@
 ## Transform Your PDFs into Interactive Conversations
 
-Click [Chat With PDF](https://ai-pdf-chat-nine.vercel.app/) the link.
+Click [Chat With PDF](https://dub.sh/Pdf-Chat) to see the website.
